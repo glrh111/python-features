@@ -1,0 +1,9 @@
+glrh11_test@163.com	
+
+qwe123
+
+授权码：qwe1231, 使用授权码认证，切记切记
+
+开启 smtp服务：https://segmentfault.com/q/1010000003802498
+在邮箱设置里面
+
