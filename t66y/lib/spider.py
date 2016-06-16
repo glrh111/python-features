@@ -2,8 +2,12 @@
 import urllib2
 from bs4 import BeautifulSoup
 import time
+import random
 import re
 from my_exception import *
+import requests
+import urllib
+
 import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -96,11 +100,40 @@ def get_fiction(url):
     finally:
         return title, content
 
-def get_picture_page_url_pool():
+def get_picture_page_url_pool(page_num):
     """
     return list[page_url, ...]
     """
-    pass
+    base = 'http://t66y.com/'
+    pic_page_lst = []
+    try:
+        base_url = 'http://t66y.com/thread0806.php?fid=16&search=&page=' + str(page_num)
+
+        response = requests.get(base_url)
+
+        soup = BeautifulSoup(response.content.decode('utf-8', 'ignore'), 'html.parser', from_encoding='GB18030')
+
+        content_tags = soup.find_all('tr', [u'tr3', u't_one'])
+
+        # print content_tags.count
+
+        for i in content_tags:
+            try:
+                pic_page_lst.append(i.td.a['href'])
+                # print pic_page_lst[-1]
+            except:
+                continue
+
+
+    except:
+        pass
+
+    finally:
+        return base, pic_page_lst
+
+
+
+
 
 def get_picture_url_pool(page_url):
     """
@@ -151,12 +184,12 @@ def get_picture_url_pool(page_url):
         return title, pic_lst
 
 
-def build_pic_name(id_of_this_page, page_title, id_in_this_page, pic_uri):
+def build_pic_name(id_of_this_page, id_of_this_subpage, page_title, id_in_this_page, pic_uri):
     """
     filename = id_of_the_page + id_in_this_page + time 
     refer to : http://www.runoob.com/python/python-date-time.html
     """
-    time_string = str(id_of_this_page) + ' - ' + page_title + ' - ' + str(id_in_this_page) + ' - ' + str(time.strftime("%a %b %d %H:%M:%S %Y", time.localtime()))
+    time_string = str(id_of_this_page) + '-' + str(id_of_this_subpage) + '-' + str(id_in_this_page) + '-' + str(time.strftime("%a-%b-%d-%H-%M-%S-%Y", time.localtime()))
 
     # try to match the filename
     # don't add space char into regex
@@ -175,7 +208,7 @@ def build_pic_name(id_of_this_page, page_title, id_in_this_page, pic_uri):
 
 
 
-def save_pictures(pic_uris, id_of_this_page, page_title):
+def save_pictures(pic_uris, id_of_this_page, id_of_this_subpage, page_title):
     """ 
     save the picture
     recieve : lst of uri
@@ -186,34 +219,49 @@ def save_pictures(pic_uris, id_of_this_page, page_title):
         # try to raise an HTTP request
         try:
             print u'\n正在请求 %s ...' % pic_uri
-            request = urllib2.Request(pic_uri, '', headers)
-            response = urllib2.urlopen(request, timeout=10)
+            # request = urllib2.Request(pic_uri, '', headers)
+            # response = urllib2.urlopen(request, timeout=10)
+            response = requests.get(pic_uri)
+            # print response.content
             # try to save the picture to local
             try:
-                picname = '../img/' + build_pic_name(id_of_this_page, page_title, idx, pic_uri)
-                print u'正在保存 %s' % pic_uri
+                picname = '../img/' + build_pic_name(id_of_this_page, id_of_this_subpage, page_title, idx, pic_uri)
+                print u'正在保存 %s' % picname
                 with open(picname, 'wb+') as f:
-                    f.write(response.read())
+                    f.write(response.content)
+                # urllib.urlretrieve(response.content, picname)
                 print u'成功保存:\n%s' % picname
             except:
                 print u'保存失败'
             else:
-                picname_lst.append(picname)
+                # picname_lst.append(picname)
+                pass
         except:
             print u'请求失败...'
-            continue
+            pass
+        finally:
+            time.sleep(random.uniform(0.5, 1))
+
 
 
 
 if __name__ == '__main__':
-    # get_picture()
 
-    title, pic_lst = get_picture_url_pool('http://t66y.com/htm_data/16/1606/1950866.html')
-    print title.encode('gbk')
-    print '\n'.join(pic_lst)
-    print '\n\n'
+    for page_idx in range(7, 100):
 
-    # get_pictures()
-    save_pictures(pic_lst, 3, title)
+        page_url_base, page_lst = get_picture_page_url_pool(page_idx)
+
+        # print page_lst
+
+        if page_lst:
+            for page_sub_idx, page_sub in enumerate(page_lst):
+
+                title, pic_lst = get_picture_url_pool(page_url_base+page_sub)
+                # print title.encode('gbk')
+                # print '\n'.join(pic_lst)
+                # print '\n\n'
+
+                print u'正在保存第<%3d>页 - 第<%3d>小页的图片...' % (page_idx, page_sub_idx)
+                save_pictures(pic_lst, page_idx, page_sub_idx, title)
     
 

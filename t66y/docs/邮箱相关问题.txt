@@ -1,9 +1,24 @@
+issur 1:
 glrh11_test@163.com	
 
-qwe123
+password: qwe123
 
-授权码：qwe1231, 使用授权码认证，切记切记
+auth_code: qwe1231
 
-开启 smtp服务：https://segmentfault.com/q/1010000003802498
-在邮箱设置里面
+auth code refer to:
+https://segmentfault.com/q/1010000003802498
+
+issur 2:
+opener:
+import urllib2
+import cookielib
+opener = urllib2.build_opener()
+or 
+cookie = cookielib.CookieJar()
+opener = urllib2.HTTPCookieProcessor(cookie)
+# add header and install it
+opener.addheaders.append(('Cookie', '__cfduid=d6c19704909712c5d08b92f2d7b8c3c7e1465003094'))
+urllib2.install_opener(opener)
+
+
 

@@ -1,6 +1,10 @@
 import urllib2
 import re
-import pickle
+
+try:
+    import cPickle as pickle
+except ImportError:
+    import pickle
 
 def get_ch(s):
     url = 'http://www.pythonchallenge.com/pc/def/' + s
@@ -12,9 +16,11 @@ banner = get_ch('banner.p').read()
 
 data = pickle.loads(banner)
 
+print data
+
 with open('tmp.txt','a') as f:
     re = ''
-    for i in data :
+    for i in data:
         for j in i:
             re += j[0] * j[1] 
         re += '\n'
