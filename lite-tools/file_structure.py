@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
 
-
 '''
 os.name : type of os, posix | nt
 
@@ -49,7 +48,7 @@ class Prefix:
 def print_dirs(dirname, dirs, depth, mode=1):
     '''
     print_dirs(dirname, dirs, depth, mode=1)
-    dirname : 
+    dirname : file = dirname + dirs[idx]
     dirs : list of files or direc
     mode : mode = 1 list of dirs; mode = other any list of files
     ├ : \u251c
@@ -91,6 +90,11 @@ def print_dirs(dirname, dirs, depth, mode=1):
 
 
 def print_dir_structure(path, depth):
+    '''
+    print_dir_structure(path, depth)
+    path : destination directory
+    depth : directory recursive depth
+    '''
     if 0 >= depth:
         return
     # achieve contents
@@ -100,7 +104,6 @@ def print_dir_structure(path, depth):
     # print every file and dir in list
     print_dirs(path, dirs, depth, 1)
     print_dirs(path, files, depth, 2)
-
 
 if __name__ == '__main__':
     path = '.'
