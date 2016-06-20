@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
-
+import argparse
 '''
 os.name : type of os, posix | nt
 
@@ -34,7 +34,14 @@ os.path.splitext(path) : (root, extentname)
     all_contents = os.listdir(path)
     dirs = [unicode(x) for x in all_contents if os.path.isdir(os.path.join(path, x))]
     files = [unicode(x) for x in all_contents if os.path.isfile(os.path.join(path, x))]
+Some error accurs when parsing: System Volume Information
+
 '''
+# set command line args
+parser = argparse.ArgumentParser()
+parser.add_argument('-p', '--path', default='.')
+parser.add_argument('-d', '--depth', default=3, type=int)
+
 class Prefix:
     '''
     prefix = DEPTH_EVERY * DEPTH + DIR/FILE
@@ -69,23 +76,31 @@ def print_dirs(dirname, dirs, depth, mode=1):
         return
     
     # print dir
-    nowname = dirs[0]
     if 1 == mode:
-        if len(dirs) <= 1:
-            print u'%s%s' % (dir_last_prefix, nowname)
-        else:
-            print u'%s%s' % (dir_not_last_prefix, nowname)
-        # print this dir
-        new_dir = os.path.join(dirname, nowname)
-        print_dir_structure(new_dir, depth-1)
+        nowname = dirs[0]
+        try:
+            if len(dirs) <= 1:
+                print u'%s%s' % (dir_last_prefix, nowname)
+            else:
+                print u'%s%s' % (dir_not_last_prefix, nowname)
+            # print this dir
+            new_dir = os.path.join(dirname, nowname)
+            print_dir_structure(new_dir, depth-1)
+        except:
+            pass
         # print other dir recursively
         dirs.pop(0)
         print_dirs(dirname, dirs, depth, mode)
+
     # print file
     else:
         # not recursive
         for i in dirs:
-            print u'%s%s' % (file_prefix, i)
+            try:
+                print u'%s%s' % (file_prefix, i)
+            # error accur
+            except:
+                print u'...'
 
 
 
@@ -105,10 +120,18 @@ def print_dir_structure(path, depth):
     print_dirs(path, dirs, depth, 1)
     print_dirs(path, files, depth, 2)
 
+
+
 if __name__ == '__main__':
-    path = '.'
+    # parse args
+    args = parser.parse_args()
+
+    path = args.path
     path = os.path.abspath(path)
-    depth = 3
+
+    depth = args.depth
     Prefix.DEPTH = depth
     print path
+
+    # print
     print_dir_structure(path, depth)

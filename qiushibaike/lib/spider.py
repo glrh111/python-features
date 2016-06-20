@@ -115,7 +115,11 @@ def get_whole_page_content(amount):
 	session.commit()
 	return 
 
-
+def update_content():
+	'''
+	update_content() : only download new pieces
+	'''
+	pass
 
 
 
