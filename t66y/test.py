@@ -9,20 +9,20 @@ import time
 # session.add(new)
 # session.commit()
 
-for idx, instance in enumerate(session.query(Fiction).filter(Fiction.id>330)):
-    print '\n'
-    try:
-        print instance.id
-        print instance.title[0]
-        print instance.add_time
-        print u'正在发送第 <%3d> 封邮件...' % (idx+1)
-        send_email('good', instance.content)
-    except:
-        print u'发送失败 <%3d> :-(' % (idx+1)
-    else:
-        print u'发送成功 <%3d> :-)' % (idx+1)
-    finally:
-        time.sleep(60)
+# for idx, instance in enumerate(session.query(Fiction).filter(Fiction.id>330)):
+#     print '\n'
+#     try:
+#         print instance.id
+#         print instance.title[0]
+#         print instance.add_time
+#         print u'正在发送第 <%3d> 封邮件...' % (idx+1)
+#         send_email('good', instance.content)
+#     except:
+#         print u'发送失败 <%3d> :-(' % (idx+1)
+#     else:
+#         print u'发送成功 <%3d> :-)' % (idx+1)
+#     finally:
+#         time.sleep(60)
 
 
 # if __name__ == '__main__':
@@ -54,3 +54,31 @@ for idx, instance in enumerate(session.query(Fiction).filter(Fiction.id>330)):
 #                 # print content.encode('gbk')
 #         session.commit()
 
+imgs = os.listdir('img/')[380:]
+
+def g():
+    for idx in range(0, len(imgs), 2):
+        yield (imgs[idx], imgs[idx+1])
+
+if __name__ == '__main__':
+    args = ('1-9-8-Sun-Jun-12-14-10-11-2016',)
+    g = g()
+    for idx, instance in enumerate(session.query(Fiction).filter(Fiction.id>710)):
+        print '\n'
+        try:
+            print instance.id
+            print instance.title[0]
+            print instance.add_time
+            print u'正在发送第 <%3d> 封邮件...' % (idx+1)
+            # images
+            images = g.next()
+            # print type(images)
+            # print images
+            send_mail_with_file(instance.content, images)
+        except:
+            raise
+            print u'发送失败 <%3d> :-(' % (idx+1)
+        else:
+            print u'发送成功 <%3d> :-)' % (idx+1)
+        finally:
+            time.sleep(60)
