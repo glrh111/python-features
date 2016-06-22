@@ -8,9 +8,17 @@ from my_exception import *
 import requests
 import urllib
 
+from decorators import *
+
 import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
+
+'''
+probs:
+get_response(url) : problems followed by @decorators
+'''
+
 
 headers = {
         'User-Agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36',
@@ -18,12 +26,16 @@ headers = {
         # 'Accept' : 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
     }
 
+@print_time
 def get_response(url):
     '''
     return response for url
     requests.response
+    there has some probs with me
+    please solve it.....MUST!!!
     '''
-    return requests.get(url, headers=headers)
+    response = requests.get(url)
+    return response
 
 def get_soup(url):
     '''
@@ -170,15 +182,11 @@ def get_picture_page_url_pool(page_num):
             except:
                 continue
 
-
     except:
-        pass
+        print u'请求列表页失败...'
 
     finally:
         return base, pic_page_lst
-
-
-
 
 
 def get_picture_url_pool(page_url):
@@ -196,7 +204,7 @@ def get_picture_url_pool(page_url):
         response = urllib2.urlopen(request)
         # analysis the response
     except:
-        pass
+        print u'请求链接页面失败...'
     else:
         # try to analysis the response
         try:
@@ -222,7 +230,7 @@ def get_picture_url_pool(page_url):
                 pass
             
         except:
-            pass
+            print u'页面解析失败'
         finally:
             pass
 
@@ -251,9 +259,21 @@ def build_pic_name(id_of_this_page, id_of_this_subpage, page_title, id_in_this_p
         raise Re_failure
     else:
         return time_string
-    
 
-
+def save_one_picture(pic_name, response):
+    try:
+        picname = 'img/' + pic_name
+        print u'正在保存 %s' % picname
+        with open(picname, 'wb+') as f:
+            f.write(response.content)
+        # urllib.urlretrieve(response.content, picname)
+        print u'成功保存:\n%s' % picname
+    except:
+        # raise
+        print u'保存失败'
+    else:
+        # picname_lst.append(picname)
+        pass
 
 def save_pictures(pic_uris, id_of_this_page, id_of_this_subpage, page_title):
     """ 
@@ -268,23 +288,14 @@ def save_pictures(pic_uris, id_of_this_page, id_of_this_subpage, page_title):
             print u'\n正在请求 %s ...' % pic_uri
             # request = urllib2.Request(pic_uri, '', headers)
             # response = urllib2.urlopen(request, timeout=10)
-            response = requests.get(pic_uri)
-            # print response.content
+            response = get_response(pic_uri)
             # try to save the picture to local
-            try:
-                picname = 'img/' + build_pic_name(id_of_this_page, id_of_this_subpage, page_title, idx, pic_uri)
-                print u'正在保存 %s' % picname
-                with open(picname, 'wb+') as f:
-                    f.write(response.content)
-                # urllib.urlretrieve(response.content, picname)
-                print u'成功保存:\n%s' % picname
-            except:
-                print u'保存失败'
-            else:
-                # picname_lst.append(picname)
-                pass
+            pic_name = build_pic_name(id_of_this_page, id_of_this_subpage, page_title, idx, pic_uri)
+            # save
+            save_one_picture(pic_name, response)
         except:
-            print u'请求失败...'
+            # raise
+            print u'请求图片页面失败...'
             pass
         finally:
             time.sleep(random.uniform(0.5, 1))

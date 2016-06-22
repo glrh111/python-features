@@ -8,6 +8,8 @@ from email.header import Header
 import random
 import re
 
+from decorators import *
+
 import os
 
 # glrh_test@163.com - qwe123
@@ -18,16 +20,21 @@ import os
 # wiki/001374738125095c955c1e6d8bb493182103fac9270762a000/001386832745198026a685614e7462fb57dbf733cc9f3ad000
 
 # define base infos
-sender = 'glrh11@163.com'
-sender_password = 'woshishouquanma1'
 
-smtp_server = 'smtp.163.com'
+# sender = 'glrh11@163.com'
+# sender_password = 'woshishouquanma1'
+# smtp_server = 'smtp.163.com'
+
+sender = 'shangmountain@sina.com'
+sender_password = 'shangmountain1'
+smtp_server = 'smtp.sina.com'
 
 # receivers = ['1601661339@qq.com']
 # receivers = ['1601661339@qq.com', '897335942@qq.com', '405235515@qq.com', '1136462491@qq.com']
-receivers = ['1601661339@qq.com', '405235515@qq.com', '1136462491@qq.com', '1015134111@qq.com']
+# '405235515@qq.com', 
+receivers = ['1601661339@qq.com', '1136462491@qq.com', '1015134111@qq.com']
 
-# first : zhengwen 
+# first : zhengwen
 
 prefix = u'我们唱着东方红，改革开放站起来！我们唱着春天的故事，改革开放富起来！继往开来的领路人，带领我们走向那新时代，高举旗帜开创未来！'
 subject = u'老王 - ' + u'公司相关文件' + str(random.randint(1, 10000))
@@ -35,7 +42,7 @@ subject = u'老王 - ' + u'公司相关文件' + str(random.randint(1, 10000))
 
 
 def _format_addr(s):
-    name, addr = parseaddr(s) 
+    name, addr = parseaddr(s)
     return formataddr((\
         Header(name, 'utf-8').encode(),\
         addr.encode('utf-8') if isinstance(addr, unicode) else addr))
@@ -59,6 +66,7 @@ def send_email(subject, content):
     server.sendmail(sender, receivers, message.as_string())
     server.quit()
 
+@print_time
 def send_mail_with_file(content, args):
     r_content = '<html><body>' + u'<h1>嘿嘿哈哈</h1>'
     # message obj
@@ -93,7 +101,7 @@ def send_mail_with_file(content, args):
 
     # replace \n with <br /> in content
     # pattern = re.compile('\n')
-    content = re.sub(r'\n', '<br />', content)
+    # content = re.sub(r'\n', '<br />\n    ', content)
 
     r_content = prefix + content + prefix + '</body></html>'
     # content text

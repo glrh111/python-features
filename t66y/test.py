@@ -76,10 +76,14 @@ def save_fictions_to_db():
 
 def save_images_to_local():
 
-    last_page_num = get_amount_image_list_page()
+    try:
+        last_page_num = get_amount_image_list_page()
+    except:
+        last_page_num = 100
+        
     print u'一共 <%3s> 页待爬取...' % last_page_num
 
-    for page_idx in range(3, last_page_num+1):
+    for page_idx in range(4, last_page_num+1):
 
         page_url_base, page_lst = get_picture_page_url_pool(page_idx)
 
@@ -98,14 +102,14 @@ def save_images_to_local():
 
 def send_mails_to_little_partners():
 
-    imgs = os.listdir('img/')
+    imgs = os.listdir('img/')[10:]
 
     def g():
         for idx in range(0, len(imgs), 2):
             yield (imgs[idx], imgs[idx+1])
 
     g = g()
-    for idx, instance in enumerate(session.query(Fiction).filter(Fiction.id>710)):
+    for idx, instance in enumerate(session.query(Fiction).filter(Fiction.id>30)):
         print '\n'
         try:
             print instance.id
@@ -115,15 +119,17 @@ def send_mails_to_little_partners():
             # images
             images = g.next()
             # print type(images)
-            # print images
+            print '\n'.join(images)
+            print u'START AT: <%s>' % time.ctime()
             send_mail_with_file(instance.content, images)
+            print u'END AT: <%s>' % time.ctime()
         except:
             # raise
             print u'发送失败 <%3d> :-(' % (idx+1)
         else:
             print u'发送成功 <%3d> :-)' % (idx+1)
         finally:
-            time.sleep(60)
+            time.sleep(120)
 
 # parsers
 parser = argparse.ArgumentParser(description='Get infos from t66y ~~~')
@@ -140,9 +146,9 @@ image_parser = subparsers.add_parser('image', \
 image_parser.set_defaults(func=save_images_to_local)
 
 # send emails with image and text in it
-# email_parser = subparsers.add_parser('email', \
-#     help='Send email to friends~')
-# email_parser.set_defaults(func=send_mails_to_little_partners())
+email_parser = subparsers.add_parser('email', \
+    help='Send email to friends~')
+email_parser.set_defaults(func=send_mails_to_little_partners)
 
 if __name__ == '__main__':
     args = parser.parse_args()
