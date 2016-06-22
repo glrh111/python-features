@@ -1,0 +1,21 @@
+{% import "bootstrap/wtf.html" as wtf %}
+{% extends "base.html" %}
+
+{% block page_content %}
+
+<div class="page-header">
+<h1>山寨版糗事百科</h1>
+</div>
+
+{% for instance in content %}
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">{{ instance.author }}</h3>
+  </div>
+  <div class="panel-body">
+    {{ instance.content }}
+  </div>
+</div>
+{% endfor %}
+
+{% endblock %}
