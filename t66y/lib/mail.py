@@ -9,6 +9,7 @@ import random
 import re
 
 import os
+
 # glrh_test@163.com - qwe123
 
 # To : 1601661339@qq.com
@@ -24,7 +25,7 @@ smtp_server = 'smtp.163.com'
 
 # receivers = ['1601661339@qq.com']
 # receivers = ['1601661339@qq.com', '897335942@qq.com', '405235515@qq.com', '1136462491@qq.com']
-receivers = ['1601661339@qq.com', '405235515@qq.com', '1136462491@qq.com']
+receivers = ['1601661339@qq.com', '405235515@qq.com', '1136462491@qq.com', '1015134111@qq.com']
 
 # first : zhengwen 
 
@@ -87,8 +88,8 @@ def send_mail_with_file(content, args):
                 msg.attach(mime)
                 r_content += '<p><img src="cid:%s"></p>' % idx
         except:
-            raise
-            # continue
+            # raise
+            continue
 
     # replace \n with <br /> in content
     # pattern = re.compile('\n')

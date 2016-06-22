@@ -18,6 +18,48 @@ headers = {
         # 'Accept' : 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
     }
 
+def get_response(url):
+    '''
+    return response for url
+    requests.response
+    '''
+    return requests.get(url, headers=headers)
+
+def get_soup(url):
+    '''
+    return soup obj for url
+    '''
+    response = get_response(url)
+    return BeautifulSoup(response.content.decode('utf-8', 'ignore'), 
+        'html.parser', from_encoding='GB18030')
+
+
+
+def get_amount_list_page():
+    '''
+    return amount of list page
+    '''
+    fiction_url = 'http://t66y.com/thread0806.php?fid=20&search=&page=2'
+    soup = get_soup(fiction_url)
+
+    page_amount_value = soup.find('input')['value']
+
+    page_amount = re.match(r'2/(\d+)', page_amount_value).group(1)
+
+    return int(page_amount)
+
+def get_amount_image_list_page():
+    '''
+    return amount of list page
+    '''
+    image_url = 'http://t66y.com/thread0806.php?fid=16&search=&page=3'
+    soup = get_soup(image_url)
+
+    page_amount_value = soup.find('input')['value']
+
+    page_amount = re.match(r'3/(\d+)', page_amount_value).group(1)
+    return int(page_amount)
+
 # tag that is this
 def is_this_tag(tag):
     """
@@ -39,7 +81,9 @@ def get_fiction_url_pool(pagenum=1):
     try:
         response = urllib2.urlopen(request, timeout=20)
     except:
+        # raise
         pass
+        
     else:
         html = response.read()
         # get the content
@@ -99,6 +143,8 @@ def get_fiction(url):
             pass
     finally:
         return title, content
+
+# def get_amount
 
 def get_picture_page_url_pool(page_num):
     """
@@ -181,6 +227,7 @@ def get_picture_url_pool(page_url):
             pass
 
     finally:
+        print '\n'.join(pic_lst)
         return title, pic_lst
 
 
@@ -225,7 +272,7 @@ def save_pictures(pic_uris, id_of_this_page, id_of_this_subpage, page_title):
             # print response.content
             # try to save the picture to local
             try:
-                picname = '../img/' + build_pic_name(id_of_this_page, id_of_this_subpage, page_title, idx, pic_uri)
+                picname = 'img/' + build_pic_name(id_of_this_page, id_of_this_subpage, page_title, idx, pic_uri)
                 print u'正在保存 %s' % picname
                 with open(picname, 'wb+') as f:
                     f.write(response.content)
@@ -247,21 +294,6 @@ def save_pictures(pic_uris, id_of_this_page, id_of_this_subpage, page_title):
 
 if __name__ == '__main__':
 
-    for page_idx in range(7, 100):
-
-        page_url_base, page_lst = get_picture_page_url_pool(page_idx)
-
-        # print page_lst
-
-        if page_lst:
-            for page_sub_idx, page_sub in enumerate(page_lst):
-
-                title, pic_lst = get_picture_url_pool(page_url_base+page_sub)
-                # print title.encode('gbk')
-                # print '\n'.join(pic_lst)
-                # print '\n\n'
-
-                print u'正在保存第<%3d>页 - 第<%3d>小页的图片...' % (page_idx, page_sub_idx)
-                save_pictures(pic_lst, page_idx, page_sub_idx, title)
+    get_amount_list_page()
     
 
