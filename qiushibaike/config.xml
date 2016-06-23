@@ -1,0 +1,14 @@
+<uwsgi>
+	<plugins>python</plugins>
+	<pythonpath>/var/www/nginx-default/flask/</pythonpath>
+	<module>server</module>
+	<callable>app</callable>
+	<socket>127.0.0.1:8000</socket>
+
+	<master/>
+
+	<processes>4</processes>
+
+	<memory-report/>
+
+</uwsgi>
