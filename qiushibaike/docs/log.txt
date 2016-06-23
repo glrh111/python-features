@@ -1,0 +1,14 @@
+2016-6-23
+1. 完善bootstrap模板，
+
+2. 瀑布流支持：
+<script src="{{ url_for('static', filename='js/masonry.pkgd.min.js') }}"
+
+忘了加入标签，导致后续js不可用，真tm的衰
+
+3. 增加触底Ajax支持
+result = json.dumps(dic)
+var re = JSON.parse(data.result)
+完美支持
+
+4. Ajax调用后，不自动执行相应js的问题？
