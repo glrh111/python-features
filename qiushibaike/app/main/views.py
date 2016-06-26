@@ -17,10 +17,6 @@ def ajax():
         result = {}
         for i in content:
             result[i.author] = i.content
-<<<<<<< HEAD
-=======
-
->>>>>>> 4f2ca269290e8c2dad91188a1b845ce1fe4edd09
     else:
         result = {'No More': u'木有更多了，哭哭哭~~~', 'hengheg': u'还要看！！！', }
 
