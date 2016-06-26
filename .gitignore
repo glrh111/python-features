@@ -12,7 +12,8 @@ dist
 build
 
 # project
-# /migrations
-/venv
+# /qiushibaike/migrations
+/qiushibaike/venv
+.gitignore
 
 # My configurations:

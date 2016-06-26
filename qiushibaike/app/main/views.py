@@ -11,7 +11,7 @@ from ..models import Hot
 def ajax():
     page = request.args.get('page', 0, type=int) + 1
 
-    # use < x < ??????????????????
+    # 20 pices a time
     content = Hot.query.filter((page*20)<Hot.id).all()[:20]
     if content != None:
         result = {}
