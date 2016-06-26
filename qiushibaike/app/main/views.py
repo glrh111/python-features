@@ -14,9 +14,7 @@ def ajax():
     # 20 pices a time
     content = Hot.query.filter((page*20)<Hot.id).all()[:20]
     if content != None:
-        result = {}
-        for i in content:
-            result[i.author] = i.content
+        result = {i.author:i.content for i in content}
     else:
         result = {'No More': u'木有更多了，哭哭哭~~~', 'hengheg': u'还要看！！！', }
 
