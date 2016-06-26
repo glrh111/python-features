@@ -22,7 +22,7 @@
 <script>
     $(function() {
         $('#loadmore').bind('click', function() {
-            $.getJSON( 'http://localhost:5000/ajax', {page:$('#loadmore').attr('value'),}, function(data) {
+            $.getJSON( "{{ url_for('main.ajax') }}", {page:$('#loadmore').attr('value'),}, function(data) {
 
                 $('#loadmore').attr('value', parseInt($('#loadmore').attr('value')) + 1);
 
@@ -53,7 +53,7 @@
 {# md 中等屏幕电脑 #}
 {# lg 大屏幕电脑 #}
 
-<div class="container masonry-container">
+<div class="masonry-container">
 
     {% for instance in content %}
 

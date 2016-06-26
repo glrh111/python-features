@@ -1,2 +1,18 @@
-t66y/lib/data.sqlite
-img/*
+# Windows:
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Python:
+*.py[cod]
+*.so
+*.egg
+*.egg-info
+dist
+build
+
+# project
+# /migrations
+/venv
+
+# My configurations:

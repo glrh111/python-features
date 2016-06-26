@@ -17,7 +17,6 @@ def ajax():
         result = {}
         for i in content:
             result[i.author] = i.content
-
     else:
         result = {'No More': u'木有更多了，哭哭哭~~~', 'hengheg': u'还要看！！！', }
 
