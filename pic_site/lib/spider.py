@@ -51,7 +51,7 @@ def get_amount_list_page():
     '''
     return amount of list page
     '''
-    fiction_url = 'http://t66y.com/thread0806.php?fid=20&search=&page=2'
+    fiction_url = 'http://site01.com/thread0806.php?fid=20&search=&page=2'
     soup = get_soup(fiction_url)
 
     page_amount_value = soup.find('input')['value']
@@ -64,7 +64,7 @@ def get_amount_image_list_page():
     '''
     return amount of list page
     '''
-    image_url = 'http://t66y.com/thread0806.php?fid=16&search=&page=3'
+    image_url = 'http://site01.com/thread0806.php?fid=16&search=&page=3'
     soup = get_soup(image_url)
 
     page_amount_value = soup.find('input')['value']
@@ -85,10 +85,10 @@ def get_fiction_url_pool(pagenum=1):
     return prefix, list[url, ...]
     """
     # define returned
-    prefix = 'http://t66y.com/'
+    prefix = 'http://site01.com/'
     url_lst = []
     # get the response
-    fiction_list_url = 'http://t66y.com/thread0806.php?fid=20&search=&page=' + str(pagenum)
+    fiction_list_url = 'http://site01.com/thread0806.php?fid=20&search=&page=' + str(pagenum)
     request = urllib2.Request(fiction_list_url, '', headers)
     try:
         response = urllib2.urlopen(request, timeout=20)
@@ -162,10 +162,10 @@ def get_picture_page_url_pool(page_num):
     """
     return list[page_url, ...]
     """
-    base = 'http://t66y.com/'
+    base = 'http://site01.com/'
     pic_page_lst = []
     try:
-        base_url = 'http://t66y.com/thread0806.php?fid=16&search=&page=' + str(page_num)
+        base_url = 'http://site01.com/thread0806.php?fid=16&search=&page=' + str(page_num)
 
         response = requests.get(base_url)
 
